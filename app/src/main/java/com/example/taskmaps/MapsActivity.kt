@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -86,6 +88,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback ,GoogleMap.OnMarker
                 BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)))
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+//    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+//        // Change the map type based on the user's selection.
+//        R.id.normal_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+//            true
+//        }
+//        R.id.hybrid_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_HYBRID
+//            true
+//        }
+//        R.id.satellite_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+//            true
+//        }
+//        R.id.terrain_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+//            true
+//        }
+//        else -> super.onOptionsItemSelected(item)
+//    }
 
 
 }
