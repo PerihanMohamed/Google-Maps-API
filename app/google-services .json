@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "362819232951",
+    "project_id": "mapstask-303708",
+    "storage_bucket": "mapstask-303708.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362819232951:android:5a5c0672a4b2bbcf109932",
+        "android_client_info": {
+          "package_name": "com.example.taskmaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362819232951-7b606kj230k8ensn6osh9a1nsbvnqh9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1HOS0B36tDsA3Z8_fJPT0FQ-g1x78sQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362819232951-7b606kj230k8ensn6osh9a1nsbvnqh9l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
