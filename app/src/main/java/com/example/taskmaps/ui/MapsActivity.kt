@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.core.app.ActivityCompat
 import com.example.taskmaps.R
-import com.example.taskmaps.ui.search.SearchFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -21,11 +20,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.maps_fragment.*
 
-class MapsActivity : AppCompatActivity() {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback ,GoogleMap.OnMarkerClickListener  {
+
+    private lateinit var map: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var lastLocation: Location
 
 
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    }
 
 
 
@@ -33,21 +38,84 @@ class MapsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
+        val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-
-            val fragment  = MapFragment()
-
-
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout ,fragment )
-
-
-
-
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
     }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+
+        map.uiSettings.isZoomControlsEnabled = true
+        map.setOnMarkerClickListener(this)
+
+        setUpMap()
+    }
+
+    override fun onMarkerClick(p0: Marker?) = false
+
+    private fun setUpMap() {
+        if (ActivityCompat.checkSelfPermission(this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
+        }
+
+        map.isMyLocationEnabled = true
+
+        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+            // Got last known location. In some rare situations this can be null.
+            if (location != null) {
+                lastLocation = location
+                val currentLatLng = LatLng(location.latitude, location.longitude)
+                placeMarkerOnMap(currentLatLng)
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+            }
+        }
+
+    }
+
+    private fun placeMarkerOnMap(location: LatLng) {
+
+        val markerOptions = MarkerOptions().position(location)
+
+        map.addMarker(markerOptions)
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+                BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)))
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+//    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+//        // Change the map type based on the user's selection.
+//        R.id.normal_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+//            true
+//        }
+//        R.id.hybrid_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_HYBRID
+//            true
+//        }
+//        R.id.satellite_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+//            true
+//        }
+//        R.id.terrain_map -> {
+//            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+//            true
+//        }
+//        else -> super.onOptionsItemSelected(item)
+//    }
 
 
 }
